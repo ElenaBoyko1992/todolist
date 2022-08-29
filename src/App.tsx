@@ -1,30 +1,41 @@
 import React, {useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
+import {v1} from "uuid";
 
 //CLI - интерфейс командной строки
-//GUI - графический интерфейс - create, read, update, delete
+//GUI - графический интерфейс - create, read, update, delete => CRUD
 
 export type FilterValuesType = "all" | "active" | "completed"
 
 function App() {
+    console.log(v1())
     //BLL (бизнес-логика):
     const todoListTitle: string = "What to learn today"
 
     const [tasks, setTasks] = useState<Array<TaskType>>([
-        {id: 1, title: "HTML&CSS", isDone: true},
-        {id: 2, title: "JS&TS", isDone: true},
-        {id: 3, title: "REACT", isDone: false},
+        {id: v1(), title: "HTML&CSS", isDone: true},
+        {id: v1(), title: "JS&TS", isDone: true},
+        {id: v1(), title: "REACT", isDone: false},
     ])
     const [filter, setFilter] = useState<FilterValuesType>("all")
 
-    const removeTask = (taskID: number) => {
+    const removeTask = (taskID: string) => {
         setTasks(tasks.filter(t => t.id !== taskID))
         //  console.log(tasks) //работает асинхронно!!!
     }
+
+    const addTask = (title: string) => {
+        setTasks([{
+            id: v1(), title: title, isDone: false
+        }, ...tasks])
+    }
+
     const changeFilter = (filter: FilterValuesType) => {
         setFilter(filter)
     }
+
+    //UI:
     const getTasksForTodoList = () => {
         switch (filter) {
             case "active":
@@ -36,7 +47,6 @@ function App() {
         }
     }
 
-    //UI:
     return (
         <div className="App">
             <TodoList
@@ -44,6 +54,7 @@ function App() {
                 tasks={getTasksForTodoList()}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
+                addTask={addTask}
             />
         </div>
     );
