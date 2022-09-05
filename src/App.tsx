@@ -24,13 +24,15 @@ function App() {
         setTasks(tasks.filter(t => t.id !== taskID))
         //  console.log(tasks) //работает асинхронно!!!
     }
-
     const addTask = (title: string) => {
         setTasks([{
-            id: v1(), title: title, isDone: false
+            id: v1(), title, isDone: false
         }, ...tasks])
     }
-
+    const changeStatus = (taskID: string, isDone: boolean) => {
+        setTasks(tasks.map(t => t.id !== taskID ? t : {...t, isDone}
+        ))
+    }
     const changeFilter = (filter: FilterValuesType) => {
         setFilter(filter)
     }
@@ -50,11 +52,13 @@ function App() {
     return (
         <div className="App">
             <TodoList
+                filter={filter}
                 title={todoListTitle}
                 tasks={getTasksForTodoList()}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
+                changeStatus={changeStatus}
             />
         </div>
     );
