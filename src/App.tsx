@@ -10,7 +10,7 @@ import {Menu} from "@material-ui/icons";
 //GUI - графический интерфейс - create, read, update, delete => CRUD
 
 export type FilterValuesType = "all" | "active" | "completed"
-type TodoListType = {
+export type TodoListType = {
     id: string
     title: string
     filter: FilterValuesType
