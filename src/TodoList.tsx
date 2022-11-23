@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo, useCallback} from 'react';
 import {FilterValuesType} from "./App";
 import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
@@ -26,8 +26,20 @@ type TodoListPropsType = {
     changeTodoListTitle: (title: string, todoListId: string) => void
 }
 
-const TodoList = (props: TodoListPropsType) => {
-    const tasksItems = props.tasks.length ? props.tasks.map(task => {
+const TodoList = memo((props: TodoListPropsType) => {
+    console.log('todolist')
+
+    let tasks = props.tasks;
+
+    if (props.filter === "active") {
+        tasks = tasks.filter(t => t.isDone === false);
+    }
+    if (props.filter === "completed") {
+        tasks = tasks.filter(t => t.isDone === true);
+    }
+
+
+    const tasksItems = tasks.length ? tasks.map(task => {
             const changeTaskTitle = (title: string) => {
                 props.changeTaskTitle(task.id, title, props.todoListId)
             }
@@ -52,13 +64,13 @@ const TodoList = (props: TodoListPropsType) => {
         })
         : <span>Tasks list is empty</span>
 
-    const addTask = (title: string) => {
+    const addTask = useCallback((title: string) => {
         props.addTask(title, props.todoListId)
-    }
-    const changeTodolistTitle = (title: string) => props.changeTodoListTitle(title, props.todoListId)
-    const handlerCreator = (filter: FilterValuesType, todoListId: string) => {
+    }, [props.addTask, props.todoListId])
+    const changeTodolistTitle = useCallback((title: string) => props.changeTodoListTitle(title, props.todoListId), [props.changeTodoListTitle, props.todoListId])
+    const handlerCreator = useCallback((filter: FilterValuesType, todoListId: string) => {
         return () => props.changeFilter(filter, todoListId)
-    }
+    }, [])
 
     return (
         <div>
@@ -107,6 +119,6 @@ const TodoList = (props: TodoListPropsType) => {
             </div>
         </div>
     );
-};
+})
 
 export default TodoList;

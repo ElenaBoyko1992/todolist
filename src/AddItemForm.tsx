@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {IconButton, TextField} from "@material-ui/core";
 
@@ -6,7 +6,8 @@ type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
-const AddItemForm = (props: AddItemFormPropsType) => {
+export const AddItemForm = memo((props: AddItemFormPropsType) => {
+
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
     const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,10 +48,10 @@ const AddItemForm = (props: AddItemFormPropsType) => {
             <IconButton onClick={addItem}>
                 <AddCircleIcon style={{color: 'hotpink'}}/>
             </IconButton>
-{/*            {userMessage}*/}
+            {/*            {userMessage}*/}
 
         </div>
     );
-};
+})
 
 export default AddItemForm;
